@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # 1. The Spatial Engine (PostGIS)
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: omni_db
+    restart: always
+    environment:
+      POSTGRES_USER: monish_admin
+      POSTGRES_PASSWORD: omnipath_password
+      POSTGRES_DB: football_analytics
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - omni_net
+
+  # 2. The High-Speed Cache (Redis)
+  redis:
+    image: redis:alpine
+    container_name: omni_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - omni_net
+
+  # 3. The AI App (Python 3.11)
+  app:
+    build: .
+    container_name: omni_app
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://monish_admin:omnipath_password@db:5432/football_analytics
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    networks:
+      - omni_net
+    command: tail -f /dev/null # Keeps container alive for you to work in
+
+networks:
+  omni_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
