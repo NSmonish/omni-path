@@ -15,6 +15,7 @@ class MatchEvent(Base):
     location = Column(Geometry('POINT'), index=True) # Added Index for performance
     velocity_mag = Column(Float)   
     velocity_theta = Column(Float) 
+    orientation = Column(Float)   # Added for YOLO-OBB body heading (0-360 degrees)
 
 # --- APRIL 23: TRAJECTORY SCHEMA (High-Dimensional Flow) ---
 class PlayerTrajectory(Base):

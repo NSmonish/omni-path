@@ -14,6 +14,8 @@
 - Run Main App: `docker exec -it omni_app python main.py`
 - Ingest StatsBomb Data: `docker exec -it omni_app python statsbomb_ingestion.py`
 - Ingest Career Stats: `docker exec -it omni_app python ingest_career_stats.py`
+- Run Orientation Engine: `docker exec -it omni_app bash -c "export PYTHONPATH=$PYTHONPATH:/app && python3 perception/orientation_engine.py"`
+- Start Ingestion Server: `docker exec -it omni_app bash -c "export PYTHONPATH=$PYTHONPATH:/app && python3 api/ingestion_server.py"`
 - Run Spatial Analytics (TDA/Voronoi): `docker exec -it omni_app bash -c "export PYTHONPATH=$PYTHONPATH:/app && python analytics/spatial_geometry.py"`
 
 - **Run Redis Stream Processor:** `docker exec -it omni_app bash -c "export PYTHONPATH=$PYTHONPATH:/app && python analytics/stream_processor.py"`
@@ -32,6 +34,7 @@
 * **Spatial Backbone:** Utilized **PostGIS** with GIST indexing for high-performance geometric calculations like distance, area, and intercept trajectories.
 * **Real-time Caching:** Integrated **Redis Streams** with **Pydantic Validation** to buffer 100+ FPS tracking data. Enforces pitch-boundary integrity before persistence.
 * **High-Dimensional Analytics (TDA):** Applied **Delaunay Triangulation** and **Persistent Homology** concepts to identify "holes" (passing lanes) in the defensive block.
+* **Computer Vision (Bird's Eye):** Implemented a **3x3 Homography Matrix** using OpenCV to project broadcast video pixels to normalized 2D pitch coordinates (meters).
 * **Production Observability:** Implemented structured logging and latency monitoring for all ETL processes.
 * **Documentation:** Maintained a **Technical Design Document (TDD)** in `DOCS/` for architectural governance.
 * **Data Sources:** Switched to **StatsBomb Open Data** for industry-standard event and trajectory data.

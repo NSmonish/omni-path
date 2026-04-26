@@ -21,15 +21,17 @@ This file serves as the "Single Source of Truth" for Gemini CLI sessions. It ens
 - **Data Ingested:** Real StatsBomb Open Data (WC Final 2022, Man City 2015/16) and Haaland Career statistics.
 - **Documentation:** Authored **TDD-001** and a professional GitHub README.
 
+### ✅ Day 4: Perception & Orientation (COMPLETED)
+- **Heading Engine:** Developed `perception/orientation_engine.py` to normalize YOLOv11-OBB angles into standard 0-360° headings.
+- **API Expansion:** Updated FastAPI ingestion endpoints to handle orientation data for real-time tactical insights.
+- **Persistence:** Refactored PostGIS schema and StreamProcessor to store player body orientation in the `events` table.
+
 ---
 
-## 🗺️ Execution Roadmap (April 24 – April 30)
+## 🗺️ Execution Roadmap (April 27 – April 30)
 
 | Date | Phase | Primary Task |
 | :--- | :--- | :--- |
-| **April 24** | **Intelligence** | **Temporal TDA:** Tracking "lifespan" of passing lanes + Pitch Control Maps. |
-| **April 25** | **Vision** | **Auto-Homography:** 3x3 Matrix to project video pixels to pitch meters. |
-| **April 26** | **Perception** | **YOLOv11-OBB:** Capturing player Heading/Orientation. |
 | **April 27** | **Tracking** | **Kalman + ByteTrack:** Occlusion-resistant path prediction. |
 | **April 28** | **Valuation** | **Expected Threat (xT):** Mapping spatial value to Haaland's runs. |
 | **April 29** | **Interface** | **FastAPI + Streamlit:** Building the live tactical dashboard. |

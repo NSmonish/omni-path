@@ -16,7 +16,7 @@ class StreamProcessor:
         self.Session = sessionmaker(bind=engine)
         self.stream_key = "match_tracking_stream"
 
-    def push_coordinate(self, player_id, x, y, timestamp=None):
+    def push_coordinate(self, player_id, x, y, timestamp=None, heading=None):
         """
         Pushes a single player coordinate to the Redis stream.
         Uses Pydantic for strict schema validation.
@@ -26,7 +26,8 @@ class StreamProcessor:
                 player_id=player_id,
                 x=x,
                 y=y,
-                timestamp=timestamp or time.time()
+                timestamp=timestamp or time.time(),
+                heading=heading
             )
             self.redis.xadd(self.stream_key, {"payload": coord.model_dump_json()})
             return True
@@ -50,7 +51,11 @@ class StreamProcessor:
             for msg_id, payload in msgs:
                 try:
                     coord = TrackingCoordinate.model_validate_json(payload[b"payload"])
-                    event = MatchEvent(player_id=coord.player_id, location=f"POINT({coord.x} {coord.y})")
+                    event = MatchEvent(
+                        player_id=coord.player_id, 
+                        location=f"POINT({coord.x} {coord.y})",
+                        orientation=coord.heading # Persisting Orientation
+                    )
                     events_to_add.append(event)
                     message_ids.append(msg_id)
                 except Exception as e:

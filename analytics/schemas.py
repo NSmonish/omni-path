@@ -11,6 +11,7 @@ class TrackingCoordinate(BaseModel):
     y: float = Field(..., ge=0, le=80)
     timestamp: float
     velocity: Optional[float] = None
+    heading: Optional[float] = Field(None, ge=0, le=360) # Player body orientation in degrees
 
     @field_validator('x', 'y')
     @classmethod

@@ -21,7 +21,8 @@ async def ingest_coordinate(coord: TrackingCoordinate):
         player_id=coord.player_id,
         x=coord.x,
         y=coord.y,
-        timestamp=coord.timestamp
+        timestamp=coord.timestamp,
+        heading=coord.heading # Added for Day 4
     )
     
     if not success:
