@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: omni-app
+spec:
+  type: LoadBalancer # Provides a Public IP to receive Colab data
+  ports:
+    - port: 80
+      targetPort: 8000
+  selector:
+    app: omni-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omni-app
+spec:
+  replicas: 2 # Scale to 2 pods for high-availability
+  selector:
+    matchLabels:
+      app: omni-app
+  template:
+    metadata:
+      labels:
+        app: omni-app
+    spec:
+      containers:
+      - name: app
+        image: omni-path-app:latest # You would push this to GCR or DockerHub
+        env:
+        - name: DB_URL
+          value: "postgresql://monish_admin:omnipath_password@omni-db:5432/football_analytics"
+        - name: REDIS_URL
+          value: "redis://omni-redis:6379/0"
+        ports:
+        - containerPort: 8000
