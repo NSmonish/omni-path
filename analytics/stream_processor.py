@@ -5,6 +5,7 @@ import logging
 from sqlalchemy.orm import sessionmaker
 from main import MatchEvent, engine
 from analytics.schemas import TrackingCoordinate
+from tracking.omni_tracker import OmniTracker
 
 # Configure production-grade logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -15,6 +16,7 @@ class StreamProcessor:
         self.redis = redis.from_url(redis_url)
         self.Session = sessionmaker(bind=engine)
         self.stream_key = "match_tracking_stream"
+        self.tracker = OmniTracker() # Day 5: Multi-player tracking memory
 
     def push_coordinate(self, player_id, x, y, timestamp=None, heading=None):
         """
@@ -51,9 +53,13 @@ class StreamProcessor:
             for msg_id, payload in msgs:
                 try:
                     coord = TrackingCoordinate.model_validate_json(payload[b"payload"])
+                    
+                    # Day 5: Pass through Kalman Filter for smoothing
+                    smoothed_pos = self.tracker.update_player(coord.player_id, coord.x, coord.y)
+
                     event = MatchEvent(
                         player_id=coord.player_id, 
-                        location=f"POINT({coord.x} {coord.y})",
+                        location=f"POINT({smoothed_pos[0]} {smoothed_pos[1]})",
                         orientation=coord.heading # Persisting Orientation
                     )
                     events_to_add.append(event)
