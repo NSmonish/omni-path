@@ -51,7 +51,7 @@ def run_xai_processor(video_path='input_match.mp4', frame_dir='frames'):
                     # Draw Oriented Box
                     rect = ((px, py), (w, h), np.degrees(rot))
                     box_points = cv2.boxPoints(rect)
-                    box_points = np.int0(box_points)
+                    box_points = box_points.astype(int) # Fixed Numpy 2.0 compatibility
                     cv2.drawContours(annotated_frame, [box_points], 0, (0, 255, 0), 2)
                     
                     # Draw Heading Arrow
