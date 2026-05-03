@@ -35,6 +35,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://monish_admin:omnipath_password@db:5432/football_analytics
       - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8501:8501" # Added for Dashboard
     depends_on:
       - db
       - redis
