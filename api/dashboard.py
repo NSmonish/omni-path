@@ -54,6 +54,12 @@ with tab1:
             st.warning("Critical: Runs YOLOv11-OBB on real match video. High CPU/GPU load.")
             if st.button("🚀 START PERCEPTION ENGINE"):
                 run_command("export PYTHONPATH=$PYTHONPATH:/app && python3 perception/xai_processor.py", "VISION_AI")
+            
+            if st.button("🛑 STOP ALL ENGINES"):
+                subprocess.run("pkill -9 -f python3", shell=True)
+                st.session_state.processes = {}
+                st.toast("🛑 All processes terminated!")
+                st.rerun()
 
     with col_b:
         st.subheader("Process Status")
